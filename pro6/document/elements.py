@@ -36,7 +36,7 @@ class DisplayElement(XmlBackedObject):
             "displayName": self.display_name,
             "displayDelay": self.delay or 0.0,
             "locked": self.locked,
-            "source": prepare_path(self.source),
+            "source": prepare_path(self.source) if self.source is not None else None,
             "bezelRadius": self.bezel_radius or 0.0,
             "rotation": self.rotation or 0.0,
             "drawingFill": (self.fill_color is not None),
@@ -71,14 +71,14 @@ class DisplayElement(XmlBackedObject):
 class TextElement(DisplayElement):
     def __init__(self, **extra):
         super().__init__("RVTextElement", extra)
-        self.text = ""
-        self.rtf = ""
+        self.text = b""
+        self.rtf = b""
 
         self.adjust_to_fit = False
         self.vertical_align = 0
         self.reveal = 0
-        self.flow_data = ""
-        self.font_data = ""
+        self.flow_data = b""
+        self.font_data = b""
 
     def write(self):
         attrib = {
@@ -86,7 +86,7 @@ class TextElement(DisplayElement):
             "verticalAlignment": self.vertical_align,
             "revealType": self.reveal
         }
-        super()._attrib.update(attrib)
+        #super().attrib.update(attrib)
         e = super().write()
 
         pairs = [
@@ -97,7 +97,7 @@ class TextElement(DisplayElement):
         ]
         for var, value in pairs:
             sub = Xml.Element("NSString", {RV_XML_VARNAME: var})
-            sub.text = base64.b64encode(value).decode('ascii')
+            sub.text = base64.b64encode(value).decode('utf-8')
             e.append(sub)
         return e
 
