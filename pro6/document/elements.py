@@ -292,8 +292,8 @@ class AudioElement(XmlBackedObject):
 
         self.file = MediaFile(unprepare_path(element.get("source")))
         self.volume = float(element.get("volume", str(self.volume)))
-        self.in_point = int(element.get("inPoint", str(self.in_point)))
-        self.out_point = int(element.get("outPoint", str(self.out_point)))
+        self.in_point = int(float(element.get("inPoint", str(self.in_point))))
+        self.out_point = int(float(element.get("outPoint", str(self.out_point))))
         self.play_rate = float(element.get("playRate", str(self.play_rate)))
         self.audio_type = int(element.get("audioType", str(self.audio_type)))
         self.playback_mode = element.get("loopBehavior", self.playback_mode)
